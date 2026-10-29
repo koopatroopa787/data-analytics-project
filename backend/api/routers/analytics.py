@@ -7,7 +7,7 @@ Provides endpoints for analytical queries, KPIs, and business metrics.
 from datetime import datetime, timedelta
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Query, status
 from pydantic import BaseModel
 from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -257,7 +257,7 @@ async def get_revenue_timeseries(
 
 @router.post("/query/adhoc")
 async def execute_adhoc_query(
-    sql_query: str,
+    sql_query: str = Body(embed=True),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> dict[str, Any]:
